@@ -52,24 +52,25 @@ FORMTION은 Notion 페이지에 **"게이트"**를 추가합니다.
 
 ## 🚀 빠른 시작
 
-### 1. 환경 변수 설정
-
-```bash
-export JWT_SECRET="your-secret-key-change-this"
-export API_URL="https://your-domain.com"  # 로컬: http://localhost:8000
-```
-
-### 2. 설치 및 실행
-
 ```bash
 git clone https://github.com/Hyunki6040/formtion-lead-for-notion.git
 cd formtion-lead-for-notion
 
-# 초기 설정 (최초 1회)
+# 1. 환경 변수 설정
+cp env.template .env
+nano .env  # JWT_SECRET, API_URL 수정
+
+# 2. 초기 설정 (최초 1회)
 ./setup.sh
 
-# 서버 시작
+# 3. 서버 시작
 ./start.sh
+```
+
+**.env 예시:**
+```env
+JWT_SECRET=your-secret-key-change-this
+API_URL=https://your-domain.com
 ```
 
 ### 3. 접속
@@ -95,12 +96,12 @@ curl -LsSf https://astral.sh/uv/install.sh | sh && source ~/.bashrc
 git clone https://github.com/Hyunki6040/formtion-lead-for-notion.git
 cd formtion-lead-for-notion
 
-# 3. 환경 변수 설정 후 설치
-export JWT_SECRET="your-production-secret-key"
-export API_URL="https://your-domain.com"
-./setup.sh
+# 3. 환경 변수 설정
+cp env.template .env
+nano .env  # JWT_SECRET, API_URL 수정
 
-# 4. 서버 시작
+# 4. 설치 및 실행
+./setup.sh
 ./start.sh
 ```
 

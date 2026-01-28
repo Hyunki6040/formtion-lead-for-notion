@@ -1,23 +1,34 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 echo "============================================"
 echo "  FORMTION - 초기 설정"
 echo "============================================"
 
-# 환경 변수 확인
-if [ -z "$JWT_SECRET" ]; then
-    echo "❌ JWT_SECRET 환경변수를 설정해주세요."
+# .env 파일 확인
+if [ ! -f "$SCRIPT_DIR/.env" ]; then
+    echo "❌ .env 파일이 없습니다."
     echo ""
-    echo "예시:"
-    echo "  export JWT_SECRET=your-secret-key-here"
-    echo "  export API_URL=https://your-domain.com"
-    echo "  ./setup.sh"
+    echo ".env 파일을 생성해주세요:"
+    echo ""
+    echo "  cp env.template .env"
+    echo "  nano .env  # 값 수정"
+    echo ""
+    exit 1
+fi
+
+# .env 파일 로드
+source "$SCRIPT_DIR/.env"
+
+# 필수 값 확인
+if [ -z "$JWT_SECRET" ]; then
+    echo "❌ .env 파일에 JWT_SECRET을 설정해주세요."
     exit 1
 fi
 
 API_URL=${API_URL:-"http://localhost:8000"}
-CORS_ORIGINS=${CORS_ORIGINS:-"[\"http://localhost:3000\",\"$API_URL\"]"}
 
 echo ""
 echo "📋 설정 확인:"
@@ -27,16 +38,16 @@ echo ""
 
 # Backend .env 생성
 echo "=== Backend 설정 ==="
-cd backend
-cat > .env << EOF
+cat > "$SCRIPT_DIR/backend/.env" << EOF
 JWT_SECRET_KEY=$JWT_SECRET
 DATABASE_URL=sqlite+aiosqlite:///./formtion.db
-CORS_ORIGINS=$CORS_ORIGINS
+CORS_ORIGINS=["http://localhost:3000","$API_URL"]
 EOF
 echo "✅ backend/.env 생성됨"
 
 # Backend 의존성 설치
 echo "📦 Backend 의존성 설치..."
+cd "$SCRIPT_DIR/backend"
 uv sync
 
 # DB 마이그레이션
@@ -46,15 +57,14 @@ uv run python migrations.py
 # Frontend 설정
 echo ""
 echo "=== Frontend 설정 ==="
-cd ../frontend
-
-cat > .env.production << EOF
+cat > "$SCRIPT_DIR/frontend/.env.production" << EOF
 VITE_API_URL=$API_URL
 EOF
 echo "✅ frontend/.env.production 생성됨"
 
 # Frontend 의존성 설치 및 빌드
 echo "📦 Frontend 의존성 설치..."
+cd "$SCRIPT_DIR/frontend"
 npm install
 
 echo "🔨 Frontend 빌드..."
