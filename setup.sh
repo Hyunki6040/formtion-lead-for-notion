@@ -28,12 +28,17 @@ if [ -z "$JWT_SECRET" ]; then
     exit 1
 fi
 
+# 기본값 설정
 API_URL=${API_URL:-"http://localhost:8000"}
+BACKEND_PORT=${BACKEND_PORT:-8000}
+FRONTEND_PORT=${FRONTEND_PORT:-3000}
 
 echo ""
 echo "📋 설정 확인:"
 echo "  - JWT_SECRET: ****${JWT_SECRET: -4}"
 echo "  - API_URL: $API_URL"
+echo "  - BACKEND_PORT: $BACKEND_PORT"
+echo "  - FRONTEND_PORT: $FRONTEND_PORT"
 echo ""
 
 # Backend .env 생성
@@ -41,7 +46,7 @@ echo "=== Backend 설정 ==="
 cat > "$SCRIPT_DIR/backend/.env" << EOF
 JWT_SECRET_KEY=$JWT_SECRET
 DATABASE_URL=sqlite+aiosqlite:///./formtion.db
-CORS_ORIGINS=["http://localhost:3000","$API_URL"]
+CORS_ORIGINS=["http://localhost:$FRONTEND_PORT","$API_URL"]
 EOF
 echo "✅ backend/.env 생성됨"
 
