@@ -1,24 +1,27 @@
 #!/bin/bash
 set -e
 
-cd ~/fromtion-lead-notion
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
 
-echo "=== Pulling latest code ==="
+echo "🚀 FORMTION 배포 시작..."
+
+echo "📥 코드 업데이트..."
 git pull origin main
 
-echo "=== Backend: Installing dependencies ==="
-cd backend
-uv sync
+echo "📦 Backend 의존성..."
+cd backend && uv sync
 
-echo "=== Running DB migrations ==="
+echo "🗄️ DB 마이그레이션..."
 uv run python migrations.py
 
-echo "=== Restarting backend ==="
-sudo systemctl restart formtion-api
+echo "📦 Frontend 빌드..."
+cd ../frontend && npm install && npm run build
 
-echo "=== Frontend: Building ==="
-cd ../frontend
-npm install
-npm run build
+echo "🔄 서버 재시작..."
+cd ..
+./stop.sh 2>/dev/null || true
+./start.sh
 
-echo "=== Deploy complete! ==="
+echo ""
+echo "✅ 배포 완료!"
