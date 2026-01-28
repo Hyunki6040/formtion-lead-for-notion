@@ -36,7 +36,9 @@ dist/
 
 # Logs
 *.log
+*.pid
 nohup.out
+logs/
 
 # Build
 build/
@@ -56,3 +58,4 @@ htmlcov/
 # uv
 .uv/
 uv.lock
+frontend/.env.production
