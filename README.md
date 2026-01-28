@@ -15,6 +15,13 @@
   콘텐츠는 이미 있습니다. 이제 리드만 수집하세요.
 </p>
 
+<p align="center">
+  <a href="https://github.com/Hyunki6040/fromtion-lead-notion">GitHub</a> •
+  <a href="#-빠른-시작">빠른 시작</a> •
+  <a href="#-ec2-배포-가이드">EC2 배포</a> •
+  <a href="#-사용-가이드">사용 가이드</a>
+</p>
+
 ---
 
 ## 🎯 왜 FORMTION인가?
@@ -80,8 +87,8 @@ FORMTION은 Notion 페이지에 **"게이트"**를 추가합니다.
 
 ```bash
 # 클론
-git clone https://github.com/YOUR_USERNAME/formtion.git
-cd formtion
+git clone https://github.com/Hyunki6040/fromtion-lead-notion.git
+cd fromtion-lead-notion
 
 # 백엔드 설정
 cd backend
@@ -205,7 +212,7 @@ SNS, 뉴스레터, 광고 등 어디든 활용 가능합니다.
 ### 프로젝트 구조
 
 ```
-formtion/
+fromtion-lead-notion/
 ├── backend/
 │   ├── app/
 │   │   ├── api/          # API 엔드포인트
@@ -222,47 +229,158 @@ formtion/
 │       ├── contexts/     # 상태 관리
 │       └── lib/          # 유틸리티
 │
+├── deploy.sh             # 배포 스크립트
 └── docs/prd/             # 기획 문서
 ```
 
 ---
 
-## 🚢 배포
+## 🚢 EC2 배포 가이드
 
-### EC2 배포 가이드
+### 1단계: 서버 준비 (Ubuntu 22.04)
 
 ```bash
-# 1. 서버 접속
-ssh ubuntu@your-server
+# SSH 접속
+ssh -i your-key.pem ubuntu@your-ec2-ip
 
-# 2. 프로젝트 클론
-git clone https://github.com/YOUR_USERNAME/formtion.git
-cd formtion
+# 필수 패키지 설치
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y python3.11 python3.11-venv python3-pip sqlite3
 
-# 3. 백엔드 설정
+# Node.js 18 설치
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# uv 설치 (Python 패키지 매니저)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source ~/.bashrc
+```
+
+### 2단계: 프로젝트 클론 및 설정
+
+```bash
+cd ~
+git clone https://github.com/Hyunki6040/fromtion-lead-notion.git
+cd fromtion-lead-notion
+
+# 백엔드 설정
 cd backend
 cp env.template .env
-nano .env  # JWT_SECRET_KEY 변경!
-uv sync
+nano .env  # JWT_SECRET_KEY 변경 필수!
+```
 
-# 4. 프론트엔드 빌드
+**.env 설정:**
+```env
+JWT_SECRET_KEY=your-super-secret-key-change-this
+DATABASE_URL=sqlite+aiosqlite:///./formtion.db
+CORS_ORIGINS=["https://your-domain.com"]
+```
+
+```bash
+# 의존성 설치 및 마이그레이션
+uv sync
+uv run python migrations.py
+
+# 프론트엔드 빌드
 cd ../frontend
 npm install
 echo "VITE_API_URL=https://your-domain.com" > .env.production
 npm run build
-
-# 5. 서비스 등록 (systemd)
-# → 상세 가이드: docs/deployment.md
 ```
 
-### 배포 업데이트
+### 3단계: Systemd 서비스 등록
 
 ```bash
-cd ~/formtion
+sudo nano /etc/systemd/system/formtion-api.service
+```
+
+```ini
+[Unit]
+Description=FORMTION API
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/fromtion-lead-notion/backend
+Environment="PATH=/home/ubuntu/.local/bin:/usr/bin"
+ExecStart=/home/ubuntu/.local/bin/uv run uvicorn app.main:app --host 127.0.0.1 --port 8000
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable formtion-api
+sudo systemctl start formtion-api
+
+# 상태 확인
+sudo systemctl status formtion-api
+```
+
+### 4단계: deploy.sh 설정
+
+```bash
+cd ~/fromtion-lead-notion
+chmod +x deploy.sh
+```
+
+**deploy.sh 내용:**
+```bash
+#!/bin/bash
+set -e
+
+cd ~/fromtion-lead-notion
+
+echo "=== Pulling latest code ==="
 git pull origin main
-cd backend && uv sync && uv run python migrations.py
+
+echo "=== Backend: Installing dependencies ==="
+cd backend
+uv sync
+
+echo "=== Running DB migrations ==="
+uv run python migrations.py
+
+echo "=== Restarting backend ==="
 sudo systemctl restart formtion-api
-cd ../frontend && npm install && npm run build
+
+echo "=== Frontend: Building ==="
+cd ../frontend
+npm install
+npm run build
+
+echo "=== Deploy complete! ==="
+```
+
+### 5단계: 업데이트 배포
+
+코드 변경 후 배포:
+
+```bash
+cd ~/fromtion-lead-notion
+./deploy.sh
+```
+
+### 6단계: Nginx 연동 (선택)
+
+별도 Nginx 서버가 있는 경우, 프록시 설정:
+
+```nginx
+# API 프록시
+location /api {
+    proxy_pass http://127.0.0.1:8000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+}
+
+# 프론트엔드 정적 파일
+location / {
+    root /home/ubuntu/fromtion-lead-notion/frontend/dist;
+    try_files $uri $uri/ /index.html;
+}
 ```
 
 ---
@@ -272,7 +390,7 @@ cd ../frontend && npm install && npm run build
 ### Backend (`backend/.env`)
 
 ```env
-# 필수
+# 필수 - 반드시 변경!
 JWT_SECRET_KEY=your-super-secret-key-change-this
 
 # 데이터베이스
@@ -310,7 +428,18 @@ uv run python migrations.py
 [DONE] 적용: 1, 스킵: 0
 ```
 
-새 마이그레이션 추가는 `backend/migrations.py`의 `MIGRATIONS` 배열에 작성합니다.
+**새 마이그레이션 추가:**
+
+`backend/migrations.py`의 `MIGRATIONS` 배열에 추가:
+
+```python
+{
+    "name": "002_add_new_column",
+    "description": "새 컬럼 추가",
+    "sql": "ALTER TABLE table_name ADD COLUMN column_name VARCHAR(100)",
+    "check": lambda conn: column_exists(conn, "table_name", "column_name"),
+},
+```
 
 ---
 
@@ -337,5 +466,5 @@ MIT License - 자유롭게 사용하세요.
 </p>
 
 <p align="center">
-  Made with ❤️ by FORMTION Team
+  Made with ❤️ by <a href="https://github.com/Hyunki6040/fromtion-lead-notion">FORMTION Team</a>
 </p>
