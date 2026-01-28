@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { ArrowRight, Sparkles, Lock, Users, Zap, Check, AlertCircle, LogIn, ExternalLink } from 'lucide-react'
+import { ArrowRight, Sparkles, Lock, Users, Zap, Check, AlertCircle, LogIn, ExternalLink, Github, Linkedin } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { isValidNotionUrl } from '../lib/utils'
 import { projectApi } from '../lib/api'
@@ -156,16 +156,29 @@ export default function LandingPage() {
       {/* 히어로 섹션 */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          {/* PRD: Orange Soft 배경의 배지 */}
-          <div 
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-6"
-            style={{
-              backgroundColor: '#FFF1EA',
-              color: '#FF5A1F',
-            }}
-          >
-            <Sparkles className="w-4 h-4" />
-            콘텐츠로 리드 수집하는 가장 쉬운 방법
+          {/* 배지 영역 */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+            {/* PRD: Orange Soft 배경의 배지 */}
+            <div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium"
+              style={{
+                backgroundColor: '#FFF1EA',
+                color: '#FF5A1F',
+              }}
+            >
+              <Sparkles className="w-4 h-4" />
+              콘텐츠로 리드 수집하는 가장 쉬운 방법
+            </div>
+            {/* Open Source 배지 */}
+            <a
+              href="https://github.com/Hyunki6040/formtion-lead-for-notion"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 transition-colors"
+            >
+              <Github className="w-4 h-4" />
+              Open Source
+            </a>
           </div>
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-text-primary mb-6 leading-tight">
@@ -306,10 +319,28 @@ export default function LandingPage() {
                 <span className="text-white font-bold text-xs">F</span>
               </div>
               <span className="text-sm text-text-muted">
-                © 2024 FORMTION. All rights reserved.
+                © 2025 FORMTION. Open Source Project.
               </span>
             </div>
             <div className="flex items-center gap-6">
+              <a
+                href="https://github.com/Hyunki6040/formtion-lead-for-notion"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-sm text-text-muted hover:text-text-primary transition-colors"
+              >
+                <Github className="w-4 h-4" />
+                GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com/in/i-am-robert/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-sm text-text-muted hover:text-text-primary transition-colors"
+              >
+                <Linkedin className="w-4 h-4" />
+                제작자
+              </a>
               <Link to="/privacy" className="text-sm text-text-muted hover:text-text-primary transition-colors">
                 개인정보처리방침
               </Link>
