@@ -55,13 +55,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         notion_url: guestProject.notion_url,
         public_slug: guestProject.public_slug || undefined,
         ux_config: guestProject.ux_config,
-        blind_config: guestProject.blind_config,
+        blind_config: {
+          ...guestProject.blind_config,
+          iframe_height: guestProject.blind_config.iframe_height || 600,
+        },
         form_config: guestProject.form_config,
+        theme_config: guestProject.theme_config,
       })
 
       // 마이그레이션 성공 시 로컬 데이터 삭제
       guestStorage.clear()
-      
+
       const projectId = response.data.project_id
       setMigratedProjectId(projectId)
       return projectId
