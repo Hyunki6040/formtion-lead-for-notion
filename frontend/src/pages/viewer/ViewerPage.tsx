@@ -22,6 +22,9 @@ interface ProjectConfig {
   theme_config?: {
     primary_color?: string
   }
+  og_title?: string
+  og_description?: string
+  og_image?: string
 }
 
 export default function ViewerPage() {
@@ -42,6 +45,41 @@ export default function ViewerPage() {
   useEffect(() => {
     loadProject()
   }, [slug, isAuthenticated])
+
+  // OG 메타 태그 설정
+  useEffect(() => {
+    if (!project) return
+
+    const updateMetaTag = (property: string, content: string) => {
+      let meta = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement
+      if (!meta) {
+        meta = document.createElement('meta')
+        meta.setAttribute('property', property)
+        document.head.appendChild(meta)
+      }
+      meta.setAttribute('content', content)
+    }
+
+    // 페이지 타이틀 설정
+    const title = project.og_title || project.name
+    document.title = title
+
+    // OG 태그 설정
+    updateMetaTag('og:title', title)
+    if (project.og_description) {
+      updateMetaTag('og:description', project.og_description)
+    }
+    if (project.og_image) {
+      updateMetaTag('og:image', project.og_image)
+    }
+    updateMetaTag('og:url', window.location.href)
+    updateMetaTag('og:type', 'website')
+
+    // 정리 함수
+    return () => {
+      document.title = 'FORMTION'
+    }
+  }, [project])
 
   // 언락 후 카운트다운 타이머
   useEffect(() => {

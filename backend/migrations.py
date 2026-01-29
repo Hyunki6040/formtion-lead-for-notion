@@ -62,13 +62,24 @@ MIGRATIONS = [
         "sql": "ALTER TABLE bookmarks ADD COLUMN name VARCHAR(200)",
         "check": lambda conn: column_exists(conn, "bookmarks", "name"),
     },
-    # 새 마이그레이션 추가 시 여기에 작성
-    # {
-    #     "name": "002_add_some_column",
-    #     "description": "설명",
-    #     "sql": "ALTER TABLE ...",
-    #     "check": lambda conn: column_exists(conn, "table", "column"),
-    # },
+    {
+        "name": "002_add_og_title_column",
+        "description": "프로젝트에 og_title 컬럼 추가",
+        "sql": "ALTER TABLE projects ADD COLUMN og_title VARCHAR(200)",
+        "check": lambda conn: column_exists(conn, "projects", "og_title"),
+    },
+    {
+        "name": "003_add_og_description_column",
+        "description": "프로젝트에 og_description 컬럼 추가",
+        "sql": "ALTER TABLE projects ADD COLUMN og_description VARCHAR(500)",
+        "check": lambda conn: column_exists(conn, "projects", "og_description"),
+    },
+    {
+        "name": "004_add_og_image_column",
+        "description": "프로젝트에 og_image 컬럼 추가",
+        "sql": "ALTER TABLE projects ADD COLUMN og_image VARCHAR(1000)",
+        "check": lambda conn: column_exists(conn, "projects", "og_image"),
+    },
 ]
 
 

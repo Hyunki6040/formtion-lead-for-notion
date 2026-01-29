@@ -144,6 +144,9 @@ class ProjectCreate(BaseModel):
     webhook_url: Optional[str] = Field(None, max_length=500)
     slack_webhook_url: Optional[str] = Field(None, max_length=500)
     discord_webhook_url: Optional[str] = Field(None, max_length=500)
+    og_title: Optional[str] = Field(None, max_length=200)
+    og_description: Optional[str] = Field(None, max_length=500)
+    og_image: Optional[str] = Field(None, max_length=1000)
 
 
 class ProjectUpdate(BaseModel):
@@ -158,6 +161,9 @@ class ProjectUpdate(BaseModel):
     webhook_url: Optional[str] = Field(None, max_length=500)
     slack_webhook_url: Optional[str] = Field(None, max_length=500)
     discord_webhook_url: Optional[str] = Field(None, max_length=500)
+    og_title: Optional[str] = Field(None, max_length=200)
+    og_description: Optional[str] = Field(None, max_length=500)
+    og_image: Optional[str] = Field(None, max_length=1000)
 
 
 class ProjectResponse(BaseModel):
@@ -174,6 +180,9 @@ class ProjectResponse(BaseModel):
     webhook_url: Optional[str] = None
     slack_webhook_url: Optional[str] = None
     discord_webhook_url: Optional[str] = None
+    og_title: Optional[str] = None
+    og_description: Optional[str] = None
+    og_image: Optional[str] = None
     created_at: datetime
     updated_at: datetime
     lead_count: int = 0
@@ -212,6 +221,9 @@ class ProjectPublicResponse(BaseModel):
     blind_config: dict
     form_config: dict
     theme_config: Optional[dict] = None
+    og_title: Optional[str] = None
+    og_description: Optional[str] = None
+    og_image: Optional[str] = None
 
     class Config:
         from_attributes = True

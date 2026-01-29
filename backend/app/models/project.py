@@ -105,6 +105,11 @@ class Project(Base):
     slack_webhook_url = Column(String(500), nullable=True)
     discord_webhook_url = Column(String(500), nullable=True)
 
+    # OG 메타 태그 설정
+    og_title = Column(String(200), nullable=True)
+    og_description = Column(String(500), nullable=True)
+    og_image = Column(String(1000), nullable=True)
+
     # 타임스탬프
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(

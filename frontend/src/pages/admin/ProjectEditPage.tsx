@@ -42,6 +42,7 @@ export default function ProjectEditPage() {
     blind: false,
     form: false,
     theme: false,
+    og: false,
     webhook: false,
   })
 
@@ -488,6 +489,37 @@ export default function ProjectEditPage() {
                     })
                   }
                   helperText="버튼, 링크, 강조 색상에 사용됩니다"
+                />
+              </div>
+            </SettingsSection>
+
+            {/* OG 메타 태그 */}
+            <SettingsSection
+              title="OG 메타 태그 (공유 미리보기)"
+              isOpen={openSections.og}
+              onToggle={() => toggleSection('og')}
+            >
+              <div className="space-y-4">
+                <Input
+                  label="og:title"
+                  placeholder={project.name || '페이지 제목'}
+                  value={project.og_title || ''}
+                  onChange={(e) => setProject({ ...project, og_title: e.target.value })}
+                  helperText="SNS 공유 시 표시될 제목 (비워두면 프로젝트 이름 사용)"
+                />
+                <Input
+                  label="og:description"
+                  placeholder="페이지 설명을 입력하세요"
+                  value={project.og_description || ''}
+                  onChange={(e) => setProject({ ...project, og_description: e.target.value })}
+                  helperText="SNS 공유 시 표시될 설명"
+                />
+                <Input
+                  label="og:image"
+                  placeholder="https://example.com/image.png"
+                  value={project.og_image || ''}
+                  onChange={(e) => setProject({ ...project, og_image: e.target.value })}
+                  helperText="SNS 공유 시 표시될 이미지 URL (권장: 1200x630px)"
                 />
               </div>
             </SettingsSection>
