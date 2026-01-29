@@ -85,28 +85,22 @@ export default function UXConfigSection({ uxConfig, onUpdate }: UXConfigSectionP
           <div className="space-y-3 pl-3 border-l-2 border-primary-200">
             <Input
               label="제목"
-              value={uxConfig.bottom_form?.title || uxConfig.top_form?.title || ''}
+              value={uxConfig.top_form?.title || uxConfig.bottom_form?.title || ''}
               onChange={(e) => {
                 const title = e.target.value;
-                if (uxConfig.top_form?.enabled) {
-                  updateTopForm({ title });
-                }
-                if (uxConfig.bottom_form?.enabled) {
-                  updateBottomForm({ title });
-                }
+                // 항상 둘 다 업데이트 (동기화 유지)
+                updateTopForm({ title });
+                updateBottomForm({ title });
               }}
             />
             <Input
               label="부제목"
-              value={uxConfig.bottom_form?.subtitle || uxConfig.top_form?.subtitle || ''}
+              value={uxConfig.top_form?.subtitle || uxConfig.bottom_form?.subtitle || ''}
               onChange={(e) => {
                 const subtitle = e.target.value;
-                if (uxConfig.top_form?.enabled) {
-                  updateTopForm({ subtitle });
-                }
-                if (uxConfig.bottom_form?.enabled) {
-                  updateBottomForm({ subtitle });
-                }
+                // 항상 둘 다 업데이트 (동기화 유지)
+                updateTopForm({ subtitle });
+                updateBottomForm({ subtitle });
               }}
             />
           </div>
