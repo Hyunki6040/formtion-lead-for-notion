@@ -134,6 +134,10 @@ async def get_project(
         theme_config=project.theme_config or {"primary_color": "#FF5A1F"},
         webhook_url=project.webhook_url,
         slack_webhook_url=project.slack_webhook_url,
+        discord_webhook_url=project.discord_webhook_url,
+        og_title=project.og_title,
+        og_description=project.og_description,
+        og_image=project.og_image,
         created_at=project.created_at,
         updated_at=project.updated_at,
         lead_count=lead_count,
@@ -192,6 +196,10 @@ async def create_project(
         theme_config=to_dict(project_data.theme_config),
         webhook_url=project_data.webhook_url,
         slack_webhook_url=project_data.slack_webhook_url,
+        discord_webhook_url=project_data.discord_webhook_url,
+        og_title=project_data.og_title,
+        og_description=project_data.og_description,
+        og_image=project_data.og_image,
     )
 
     # None인 설정은 기본값 사용
@@ -245,6 +253,10 @@ async def create_project(
         theme_config=project.theme_config or {"primary_color": "#FF5A1F"},
         webhook_url=project.webhook_url,
         slack_webhook_url=project.slack_webhook_url,
+        discord_webhook_url=project.discord_webhook_url,
+        og_title=project.og_title,
+        og_description=project.og_description,
+        og_image=project.og_image,
         created_at=project.created_at,
         updated_at=project.updated_at,
         lead_count=0,
@@ -308,6 +320,10 @@ async def update_project(
         theme_config=project.theme_config or {"primary_color": "#FF5A1F"},
         webhook_url=project.webhook_url,
         slack_webhook_url=project.slack_webhook_url,
+        discord_webhook_url=project.discord_webhook_url,
+        og_title=project.og_title,
+        og_description=project.og_description,
+        og_image=project.og_image,
         created_at=project.created_at,
         updated_at=project.updated_at,
         lead_count=lead_count,
@@ -514,6 +530,9 @@ async def get_public_project(
         blind_config=project.blind_config,
         form_config=project.form_config,
         theme_config=project.theme_config or {"primary_color": "#FF5A1F"},
+        og_title=project.og_title,
+        og_description=project.og_description,
+        og_image=project.og_image,
     )
 
 
