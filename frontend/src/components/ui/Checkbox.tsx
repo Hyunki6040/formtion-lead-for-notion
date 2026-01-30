@@ -11,17 +11,17 @@ interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'typ
 const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ({ className, label, description, error, ...props }, ref) => {
     return (
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-2">
         <div className="flex items-center justify-center flex-shrink-0 mt-0.5">
           <div className="relative inline-flex items-center justify-center">
             <input
               ref={ref}
               type="checkbox"
               className={cn(
-                'peer h-5 w-5 min-h-[20px] min-w-[20px] rounded border-2 cursor-pointer',
+                'peer h-4 w-4 min-h-[16px] min-w-[16px] rounded border-[1.5px] cursor-pointer',
                 'transition-all duration-200 bg-white',
                 'checked:bg-[var(--project-primary)] checked:border-[var(--project-primary)]',
-                'focus:outline-none focus:ring-2 focus:ring-[var(--project-primary)] focus:ring-offset-2',
+                'focus:outline-none focus:ring-2 focus:ring-[var(--project-primary)] focus:ring-offset-1',
                 'disabled:cursor-not-allowed disabled:opacity-50',
                 error ? 'border-red-500' : 'border-gray-300',
                 className
@@ -34,7 +34,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
               {...props}
             />
             <Check
-              className="absolute inset-0 m-auto w-3.5 h-3.5 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+              className="absolute inset-0 m-auto w-2.5 h-2.5 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
               strokeWidth={3}
             />
           </div>
