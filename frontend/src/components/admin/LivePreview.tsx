@@ -46,6 +46,13 @@ export default function LivePreview({
     }
   }, [isUnlocked])
 
+  // 진입 모달이 활성화되면 즉시 표시 (타이머 무시, dismissed 상태 리셋)
+  useEffect(() => {
+    if (uxConfig?.entry_modal?.enabled) {
+      setEntryModalDismissed(false)
+    }
+  }, [uxConfig?.entry_modal?.enabled])
+
   // 미리보기 새로고침
   const handleRefresh = () => {
     setRefreshKey((prev) => prev + 1)
