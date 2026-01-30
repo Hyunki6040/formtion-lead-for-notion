@@ -296,8 +296,8 @@ export default function LivePreview({
                 </motion.div>
               )}
             </AnimatePresence>
-            {/* Top Form */}
-            {uxConfig?.top_form?.enabled && !isUnlocked && (
+            {/* Top Form - 모바일 뷰에서 숨기기 옵션 지원 */}
+            {uxConfig?.top_form?.enabled && !isUnlocked && !(viewMode === 'mobile' && uxConfig?.top_form?.hide_on_mobile) && (
               <TopBottomForm
                 position="top"
                 title={uxConfig.top_form.title}
