@@ -276,22 +276,18 @@ export default function ViewerPage() {
       )}
 
       {/* Notion Embed + Blur Overlay */}
-      {/* 블라인드 없음(none)이거나 언락된 경우 높이 제한 해제 */}
+      {/* 블라인드 없음(none)이거나 언락된 경우: flex-1 제거하여 하단 폼이 보이도록 */}
       <div
-        className="relative flex-1 overflow-hidden"
-        style={
-          isUnlocked || blind_config?.method === 'none'
-            ? { minHeight: blind_config?.iframe_height || 600 }
-            : {
-                minHeight: blind_config?.iframe_height || 600,
-                height: blind_config?.iframe_height || 600,
-              }
-        }
+        className={`relative overflow-hidden ${isUnlocked || blind_config?.method === 'none' ? '' : 'flex-1'}`}
+        style={{
+          minHeight: blind_config?.iframe_height || 600,
+          height: isUnlocked || blind_config?.method === 'none' ? 'auto' : (blind_config?.iframe_height || 600),
+        }}
       >
         <NotionEmbed
           url={project.notion_url}
           isLocked={!isUnlocked && blind_config?.method !== 'none'}
-          height={isUnlocked || blind_config?.method === 'none' ? undefined : (blind_config?.iframe_height || 600)}
+          height={blind_config?.iframe_height || 600}
         />
 
         {/* 블러 오버레이 - method가 'none'이면 표시하지 않음 */}

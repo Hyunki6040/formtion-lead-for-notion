@@ -161,17 +161,11 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
   }
 
   // 유효한 URL인 경우 - iframe으로 Notion 페이지 표시
-  // height가 undefined면 높이 제한 없음 (전체 콘텐츠 표시)
-  const hasFixedHeight = height !== undefined
-  const containerHeight = hasFixedHeight ? `${height}px` : 'auto'
-  const iframeHeight = hasFixedHeight ? `${height}px` : '100vh'
-
   return (
     <div
       className="relative w-full bg-white"
       style={{
-        height: containerHeight,
-        minHeight: hasFixedHeight ? undefined : '100vh',
+        height: `${height}px`,
         overflow: isLocked ? 'hidden' : 'visible',
         pointerEvents: isLocked ? 'none' : 'auto',
       }}
@@ -190,9 +184,9 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
       <iframe
         ref={iframeRef}
         src={embedUrl}
-        className={`w-full border-0 ${hasFixedHeight ? 'absolute inset-0 h-full' : ''}`}
+        className="w-full h-full absolute inset-0 border-0"
         style={{
-          height: iframeHeight,
+          height: `${height}px`,
           overflow: isLocked ? 'hidden' : 'auto',
           pointerEvents: isLocked ? 'none' : 'auto',
         }}

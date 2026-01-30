@@ -317,13 +317,13 @@ export default function LivePreview({
             )}
 
             {/* Notion Embed (미리보기 모드) */}
-            {/* 블라인드 없음(none)이거나 언락된 경우 높이 제한 해제 */}
+            {/* 블라인드 없음(none)이거나 언락된 경우: 높이 auto로 하단 폼이 보이도록 */}
             <div
               className="relative"
               style={{
-                minHeight: blindConfig?.iframe_height || 800,
+                minHeight: blindConfig?.iframe_height || 600,
                 overflow: !isUnlocked && blindConfig?.method !== 'none' ? 'hidden' : 'visible',
-                height: 'auto',
+                height: isUnlocked || blindConfig?.method === 'none' ? 'auto' : (blindConfig?.iframe_height || 600),
               }}
             >
               {notionUrl ? (
@@ -331,7 +331,7 @@ export default function LivePreview({
                   url={notionUrl}
                   isPreview={true}
                   isLocked={!isUnlocked && blindConfig?.method !== 'none'}
-                  height={isUnlocked || blindConfig?.method === 'none' ? undefined : (blindConfig?.iframe_height || 600)}
+                  height={blindConfig?.iframe_height || 600}
                 />
               ) : (
                 <div className="flex items-center justify-center h-[400px] bg-gray-50">
