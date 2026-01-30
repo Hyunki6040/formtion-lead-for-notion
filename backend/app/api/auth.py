@@ -4,15 +4,17 @@
 """
 
 from datetime import datetime
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 
-from app.core.database import get_db
-from app.core.security import get_password_hash, verify_password, create_access_token
-from app.models.user import User
-from app.schemas.user import UserCreate, UserLogin, UserResponse, TokenResponse
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.api.deps import get_current_user
+from app.core.database import get_db
+from app.core.security import create_access_token, get_password_hash, verify_password
+from app.models.user import User
+from app.schemas.user import TokenResponse, UserCreate, UserLogin, UserResponse
+from app.services.webhook import send_discord_signup_notification
 
 router = APIRouter(prefix="/api/auth", tags=["인증"])
 
@@ -49,6 +51,15 @@ async def register(
     db.add(user)
     await db.commit()
     await db.refresh(user)
+
+    # Discord 알림 전송 (백그라운드, 실패해도 가입은 완료)
+    try:
+        await send_discord_signup_notification(
+            user_email=user.email,
+            user_name=user.name,
+        )
+    except Exception:
+        pass  # 알림 실패해도 가입 프로세스에 영향 없음
 
     # JWT 토큰 생성
     access_token = create_access_token(data={"sub": user.user_id})

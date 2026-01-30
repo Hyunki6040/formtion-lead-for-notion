@@ -3,8 +3,10 @@ Webhook 서비스
 HTTP Webhook 전송 로직 (일반, Slack, Discord 지원)
 """
 
+from typing import Tuple, Union
+
 import httpx
-from typing import Optional, Tuple, Union
+
 from app.core.config import settings
 
 
@@ -142,3 +144,50 @@ async def send_discord_webhook(
     return await send_webhook(webhook_url, discord_payload, return_details)
 
 
+async def send_discord_signup_notification(
+    user_email: str,
+    user_name: str,
+) -> bool:
+    """
+    신규 유저 가입 시 Discord 알림 전송
+
+    Args:
+        user_email: 가입한 유저 이메일
+        user_name: 가입한 유저 이름
+
+    Returns:
+        전송 성공 여부
+    """
+    webhook_url = settings.DISCORD_SIGNUP_WEBHOOK_URL
+
+    if not webhook_url:
+        return False
+
+    # Discord embed 색상 (파란색: 새 가입)
+    embed_color = 0x3B82F6
+
+    discord_payload = {
+        "embeds": [
+            {
+                "title": "🎉 새로운 유저가 가입했습니다!",
+                "color": embed_color,
+                "fields": [
+                    {
+                        "name": "👤 이름",
+                        "value": user_name or "-",
+                        "inline": True,
+                    },
+                    {
+                        "name": "📧 이메일",
+                        "value": user_email,
+                        "inline": True,
+                    },
+                ],
+                "footer": {
+                    "text": "FORMTION",
+                },
+            }
+        ],
+    }
+
+    return await send_webhook(webhook_url, discord_payload)

@@ -3,9 +3,9 @@
 환경 변수 및 기본 설정을 관리
 """
 
-from pydantic_settings import BaseSettings
 from functools import lru_cache
-from typing import Optional
+
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -37,6 +37,9 @@ class Settings(BaseSettings):
     # Webhook 설정
     WEBHOOK_MAX_RETRIES: int = 2
     WEBHOOK_TIMEOUT_SECONDS: int = 10
+
+    # Discord 알림 설정
+    DISCORD_SIGNUP_WEBHOOK_URL: str = "https://discord.com/api/webhooks/1466595976965001439/TeSP8g7VZaDtEbEk1kCzH7uCA9S2Z2KV74LeBPuzu2ktxRGipJyOMK4TSL_kj7l3lmoq"
 
     # 프론트엔드 URL
     FRONTEND_URL: str = "http://localhost:3000"
