@@ -321,9 +321,9 @@ export default function LivePreview({
             <div
               className="relative"
               style={{
-                minHeight: blindConfig?.iframe_height || 600,
+                minHeight: blindConfig?.method === 'none' ? '100vh' : (blindConfig?.iframe_height || 600),
                 overflow: !isUnlocked && blindConfig?.method !== 'none' ? 'hidden' : 'visible',
-                height: isUnlocked || blindConfig?.method === 'none' ? 'auto' : (blindConfig?.iframe_height || 600),
+                height: blindConfig?.method === 'none' ? '100vh' : (isUnlocked ? 'auto' : (blindConfig?.iframe_height || 600)),
               }}
             >
               {notionUrl ? (
@@ -331,7 +331,7 @@ export default function LivePreview({
                   url={notionUrl}
                   isPreview={true}
                   isLocked={!isUnlocked && blindConfig?.method !== 'none'}
-                  height={blindConfig?.iframe_height || 600}
+                  height={blindConfig?.method === 'none' ? window.innerHeight : (blindConfig?.iframe_height || 600)}
                 />
               ) : (
                 <div className="flex items-center justify-center h-[400px] bg-gray-50">

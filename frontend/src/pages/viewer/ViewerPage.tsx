@@ -280,14 +280,14 @@ export default function ViewerPage() {
       <div
         className={`relative overflow-hidden ${isUnlocked || blind_config?.method === 'none' ? '' : 'flex-1'}`}
         style={{
-          minHeight: blind_config?.iframe_height || 600,
-          height: isUnlocked || blind_config?.method === 'none' ? 'auto' : (blind_config?.iframe_height || 600),
+          minHeight: blind_config?.method === 'none' ? '100vh' : (blind_config?.iframe_height || 600),
+          height: blind_config?.method === 'none' ? '100vh' : (isUnlocked ? 'auto' : (blind_config?.iframe_height || 600)),
         }}
       >
         <NotionEmbed
           url={project.notion_url}
           isLocked={!isUnlocked && blind_config?.method !== 'none'}
-          height={blind_config?.iframe_height || 600}
+          height={blind_config?.method === 'none' ? window.innerHeight : (blind_config?.iframe_height || 600)}
         />
 
         {/* 블러 오버레이 - method가 'none'이면 표시하지 않음 */}
