@@ -472,6 +472,18 @@ export default function ProjectEditPage() {
                 />
               </div>
 
+              <Input
+                label="버튼 텍스트"
+                placeholder="전체 내용 보기"
+                value={project.form_config?.button_label || ''}
+                onChange={(e) =>
+                  setProject({
+                    ...project,
+                    form_config: { ...project.form_config, button_label: e.target.value },
+                  })
+                }
+              />
+
               <div className="space-y-3 pt-2 border-t border-border">
                 <label className="text-sm font-medium text-text-primary">문구 설정</label>
                 {(
