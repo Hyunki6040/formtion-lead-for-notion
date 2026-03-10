@@ -195,13 +195,13 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
         style={{
           height: `${iframeInternalHeight}px`,
           overflow: isLocked ? 'hidden' : 'auto',
-          pointerEvents: isLocked ? 'none' : 'auto',
+          pointerEvents: (isLocked || hideComments) ? 'none' : 'auto',
         }}
         onLoad={handleIframeLoad}
         onError={handleIframeError}
         title={pageTitle || 'Notion Content'}
         allowFullScreen
-        scrolling={isLocked ? 'no' : 'yes'}
+        scrolling={(isLocked || hideComments) ? 'no' : 'yes'}
       />
 
       {/* Notion 우측 댓글/네비게이션 패널 가리기 */}
