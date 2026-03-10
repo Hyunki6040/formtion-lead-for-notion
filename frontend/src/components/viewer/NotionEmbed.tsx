@@ -162,10 +162,9 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
     )
   }
 
-  // hideComments 모드: iframe을 매우 크게 설정하고 컨테이너로 clip
+  // hideComments 모드: clip-path으로 우측 220px 댓글 영역 숨김 (height 제한 없음)
   // 일반 모드: height 그대로 사용
   const containerHeight = height
-  const iframeInternalHeight = hideComments ? Math.max(height * 3, 3000) : height
 
   // 유효한 URL인 경우 - iframe으로 Notion 페이지 표시
   return (
@@ -175,6 +174,7 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
         height: `${containerHeight}px`,
         overflow: 'hidden',
         pointerEvents: isLocked ? 'none' : 'auto',
+        ...(hideComments ? { clipPath: 'inset(0 220px 0 0)' } : {}),
       }}
     >
       {/* 로딩 상태 */}
@@ -193,7 +193,7 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
         src={embedUrl}
         className="w-full absolute inset-x-0 top-0 border-0"
         style={{
-          height: `${iframeInternalHeight}px`,
+          height: `${containerHeight}px`,
           overflow: isLocked ? 'hidden' : 'auto',
           pointerEvents: (isLocked || hideComments) ? 'none' : 'auto',
         }}
@@ -203,14 +203,6 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
         allowFullScreen
         scrolling={(isLocked || hideComments) ? 'no' : 'yes'}
       />
-
-      {/* Notion 우측 댓글/네비게이션 패널 가리기 */}
-      {hideComments && (
-        <div
-          className="absolute top-0 right-0 bottom-0 bg-white"
-          style={{ width: '220px', zIndex: 5 }}
-        />
-      )}
     </div>
   )
 }

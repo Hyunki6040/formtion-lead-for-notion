@@ -286,7 +286,7 @@ export default function ViewerPage() {
         <NotionEmbed
           url={project.notion_url}
           isLocked={!isUnlocked && blind_config?.method !== 'none'}
-          height={blind_config?.method === 'none' ? Math.round(window.innerHeight * 1.5) : (blind_config?.iframe_height || 600)}
+          height={blind_config?.method === 'none' ? 4000 : (blind_config?.iframe_height || 600)}
           hideComments={blind_config?.method === 'none'}
         />
 
