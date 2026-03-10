@@ -218,7 +218,7 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
       {hideComments && (
         <div
           className="absolute top-0 right-0 bottom-0 pointer-events-none z-10"
-          style={{ width: '220px', background: notionBg }}
+          style={{ width: 'max(220px, calc(100% - 1020px))', background: notionBg }}
         />
       )}
     </div>
