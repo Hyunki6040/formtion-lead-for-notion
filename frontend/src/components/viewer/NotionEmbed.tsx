@@ -8,6 +8,8 @@ interface NotionEmbedProps {
   isLocked?: boolean
   /** iframe 높이 (px 단위) */
   height?: number
+  /** Notion 우측 댓글 패널 숨기기 */
+  hideComments?: boolean
 }
 
 /**
@@ -49,7 +51,7 @@ function convertToEmbedUrl(url: string): string {
  * Notion의 "웹에 게시" 페이지를 iframe으로 임베드합니다.
  * /ebd/ 경로를 사용하여 CSP 우회합니다.
  */
-export default function NotionEmbed({ url, isPreview: _isPreview = false, isLocked = false, height = 600 }: NotionEmbedProps) {
+export default function NotionEmbed({ url, isPreview: _isPreview = false, isLocked = false, height = 600, hideComments = false }: NotionEmbedProps) {
   const [isValidUrl, setIsValidUrl] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
@@ -160,13 +162,18 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
     )
   }
 
+  // hideComments 모드: iframe을 매우 크게 설정하고 컨테이너로 clip
+  // 일반 모드: height 그대로 사용
+  const containerHeight = height
+  const iframeInternalHeight = hideComments ? Math.max(height * 3, 3000) : height
+
   // 유효한 URL인 경우 - iframe으로 Notion 페이지 표시
   return (
     <div
       className="relative w-full bg-white"
       style={{
-        height: `${height}px`,
-        overflow: isLocked ? 'hidden' : 'visible',
+        height: `${containerHeight}px`,
+        overflow: 'hidden',
         pointerEvents: isLocked ? 'none' : 'auto',
       }}
     >
@@ -184,9 +191,9 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
       <iframe
         ref={iframeRef}
         src={embedUrl}
-        className="w-full h-full absolute inset-0 border-0"
+        className="w-full absolute inset-x-0 top-0 border-0"
         style={{
-          height: `${height}px`,
+          height: `${iframeInternalHeight}px`,
           overflow: isLocked ? 'hidden' : 'auto',
           pointerEvents: isLocked ? 'none' : 'auto',
         }}
@@ -196,6 +203,14 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
         allowFullScreen
         scrolling={isLocked ? 'no' : 'yes'}
       />
+
+      {/* Notion 우측 댓글/네비게이션 패널 가리기 */}
+      {hideComments && (
+        <div
+          className="absolute top-0 right-0 bottom-0 bg-white"
+          style={{ width: '120px', zIndex: 5 }}
+        />
+      )}
     </div>
   )
 }
