@@ -323,7 +323,7 @@ export default function LivePreview({
               style={{
                 minHeight: blindConfig?.method === 'none' ? '100vh' : (blindConfig?.iframe_height || 600),
                 overflow: !isUnlocked && blindConfig?.method !== 'none' ? 'hidden' : 'visible',
-                height: blindConfig?.method === 'none' ? '100vh' : (isUnlocked ? 'auto' : (blindConfig?.iframe_height || 600)),
+                height: blindConfig?.method === 'none' ? 'auto' : (isUnlocked ? 'auto' : (blindConfig?.iframe_height || 600)),
               }}
             >
               {notionUrl ? (
@@ -331,7 +331,7 @@ export default function LivePreview({
                   url={notionUrl}
                   isPreview={true}
                   isLocked={!isUnlocked && blindConfig?.method !== 'none'}
-                  height={blindConfig?.method === 'none' ? window.innerHeight : (blindConfig?.iframe_height || 600)}
+                  height={blindConfig?.method === 'none' ? Math.round(window.screen.height * 4) : (blindConfig?.iframe_height || 600)}
                 />
               ) : (
                 <div className="flex items-center justify-center h-[400px] bg-gray-50">

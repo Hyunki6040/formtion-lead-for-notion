@@ -455,6 +455,22 @@ export default function ProjectEditPage() {
                   }
                 />
                 <Switch
+                  label="세부사항 (주관식)"
+                  checked={project.form_config?.fields?.detail?.enabled ?? false}
+                  onChange={(e) =>
+                    setProject({
+                      ...project,
+                      form_config: {
+                        ...project.form_config,
+                        fields: {
+                          ...project.form_config?.fields,
+                          detail: { ...project.form_config?.fields?.detail, enabled: e.target.checked },
+                        },
+                      },
+                    })
+                  }
+                />
+                <Switch
                   label="마케팅 수신 동의"
                   checked={project.form_config?.consent?.marketing?.enabled ?? false}
                   onChange={(e) =>
@@ -496,6 +512,7 @@ export default function ProjectEditPage() {
                     { key: 'marketing_label', label: '마케팅 동의 문구' },
                     { key: 'trust_text', label: '신뢰 문구 (버튼 하단)' },
                     { key: 'skip_label', label: '건너뛰기 버튼 문구' },
+                    { key: 'detail_placeholder', label: '세부사항 플레이스홀더' },
                   ] as const
                 ).map(({ key, label }) => (
                   <Input

@@ -100,6 +100,7 @@ class FormFieldsConfig(BaseModel):
     role: FormFieldConfig = FormFieldConfig(
         options=["CEO/Founder", "마케팅 담당자", "세일즈 담당자", "기타"]
     )
+    detail: FormFieldConfig = FormFieldConfig(enabled=False, required=False)
 
 
 class ConsentConfig(BaseModel):
@@ -127,6 +128,7 @@ class FormTextsConfig(BaseModel):
     marketing_label: str = "업데이트/새 템플릿 소식을 받아볼래요."
     trust_text: str = "스팸 없음 · 한 번만 입력 · 재방문시 자동 열림"
     skip_label: str = "나중에 할게요"
+    detail_placeholder: str = "세부사항을 입력해주세요."
 
 
 class FormConfig(BaseModel):

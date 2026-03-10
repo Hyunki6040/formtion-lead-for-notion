@@ -28,6 +28,7 @@ export interface GuestProjectData {
       name: { enabled: boolean; required: boolean }
       company: { enabled: boolean; required: boolean }
       role: { enabled: boolean; required: boolean }
+      detail: { enabled: boolean; required: boolean }
     }
     consent: {
       privacy: { enabled: boolean; required: boolean }
@@ -44,6 +45,7 @@ export interface GuestProjectData {
       marketing_label: string
       trust_text: string
       skip_label: string
+      detail_placeholder: string
     }
   }
   theme_config: {
@@ -81,6 +83,7 @@ export const defaultGuestProjectData: Omit<GuestProjectData, 'id' | 'created_at'
       name: { enabled: false, required: false },
       company: { enabled: false, required: false },
       role: { enabled: false, required: false },
+      detail: { enabled: false, required: false },
     },
     consent: {
       privacy: { enabled: true, required: true },
@@ -97,6 +100,7 @@ export const defaultGuestProjectData: Omit<GuestProjectData, 'id' | 'created_at'
       marketing_label: '업데이트/새 템플릿 소식을 받아볼래요.',
       trust_text: '스팸 없음 · 한 번만 입력 · 재방문시 자동 열림',
       skip_label: '나중에 할게요',
+      detail_placeholder: '세부사항을 입력해주세요.',
     },
   },
   theme_config: {

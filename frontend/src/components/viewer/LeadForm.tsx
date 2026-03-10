@@ -7,6 +7,7 @@ import Input from '../ui/Input'
 import Select from '../ui/Select'
 import Checkbox from '../ui/Checkbox'
 import Button from '../ui/Button'
+import Textarea from '../ui/Textarea'
 
 interface FormConfig {
   fields: {
@@ -14,6 +15,7 @@ interface FormConfig {
     name: { enabled: boolean; required: boolean }
     company: { enabled: boolean; required: boolean }
     role: { enabled: boolean; required: boolean; options?: string[] }
+    detail?: { enabled: boolean; required: boolean }
   }
   consent: {
     privacy: { enabled: boolean; required: boolean }
@@ -29,6 +31,7 @@ interface FormConfig {
     marketing_label?: string
     trust_text?: string
     skip_label?: string
+    detail_placeholder?: string
   }
 }
 
@@ -71,6 +74,12 @@ export default function LeadForm({
     schemaShape.role = z.string().min(1, '직무를 선택해주세요.')
   } else {
     schemaShape.role = z.string().optional()
+  }
+
+  if (formConfig.fields.detail?.enabled && formConfig.fields.detail?.required) {
+    schemaShape.detail = z.string().min(1, '세부사항을 입력해주세요.')
+  } else {
+    schemaShape.detail = z.string().optional()
   }
 
   if (formConfig.consent.privacy?.enabled && formConfig.consent.privacy?.required) {
@@ -162,6 +171,17 @@ export default function LeadForm({
           error={errors.role?.message as string}
           required={formConfig.fields.role.required}
           {...register('role')}
+        />
+      )}
+
+      {/* 세부사항 */}
+      {formConfig.fields.detail?.enabled && (
+        <Textarea
+          placeholder={t.detail_placeholder || '세부사항을 입력해주세요.'}
+          rows={3}
+          error={errors.detail?.message as string}
+          required={formConfig.fields.detail.required}
+          {...register('detail')}
         />
       )}
 

@@ -47,6 +47,7 @@ interface ProjectData {
       name: { enabled: boolean; required: boolean }
       company: { enabled: boolean; required: boolean }
       role: { enabled: boolean; required: boolean }
+      detail: { enabled: boolean; required: boolean }
     }
     consent: {
       privacy: { enabled: boolean; required: boolean }
@@ -63,6 +64,7 @@ interface ProjectData {
       marketing_label: string
       trust_text: string
       skip_label: string
+      detail_placeholder: string
     }
   }
   theme_config: {
@@ -95,6 +97,7 @@ const defaultProjectData: ProjectData = {
       name: { enabled: true, required: false },
       company: { enabled: true, required: false },
       role: { enabled: false, required: false },
+      detail: { enabled: false, required: false },
     },
     consent: {
       privacy: { enabled: true, required: true },
@@ -111,6 +114,7 @@ const defaultProjectData: ProjectData = {
       marketing_label: '업데이트/새 템플릿 소식을 받아볼래요.',
       trust_text: '스팸 없음 · 한 번만 입력 · 재방문시 자동 열림',
       skip_label: '나중에 할게요',
+      detail_placeholder: '세부사항을 입력해주세요.',
     },
   },
   theme_config: {
@@ -559,6 +563,7 @@ export default function ProjectCreatePage() {
                         { key: 'marketing_label', label: '마케팅 동의 문구' },
                         { key: 'trust_text', label: '신뢰 문구 (버튼 하단)' },
                         { key: 'skip_label', label: '건너뛰기 버튼 문구' },
+                        { key: 'detail_placeholder', label: '세부사항 플레이스홀더' },
                       ] as const
                     ).map(({ key, label }) => (
                       <Input
