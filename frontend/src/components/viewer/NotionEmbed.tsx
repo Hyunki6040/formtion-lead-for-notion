@@ -57,7 +57,17 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
   const [hasError, setHasError] = useState(false)
   const [pageTitle, setPageTitle] = useState<string>('')
   const [embedUrl, setEmbedUrl] = useState<string>('')
+  const [isDarkMode, setIsDarkMode] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
+  )
   const iframeRef = useRef<HTMLIFrameElement>(null)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = (e: MediaQueryListEvent) => setIsDarkMode(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
   useEffect(() => {
     if (!url) {
@@ -176,8 +186,7 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
         pointerEvents: isLocked ? 'none' : 'auto',
         ...(hideComments ? {
           clipPath: 'inset(0 220px 0 0)',
-          colorScheme: 'light dark',
-          background: 'Canvas',
+          background: isDarkMode ? '#191919' : 'white',
         } : { background: 'white' }),
       }}
     >
