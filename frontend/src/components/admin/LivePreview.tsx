@@ -329,7 +329,7 @@ export default function LivePreview({
                   url={notionUrl}
                   isPreview={true}
                   isLocked={!isUnlocked && blindConfig?.method !== 'none'}
-                  height={blindConfig?.method === 'none' ? 4000 : (blindConfig?.iframe_height || 600)}
+                  height={blindConfig?.method === 'none' ? 2800 : (blindConfig?.iframe_height || 600)}
                   hideComments={blindConfig?.method === 'none'}
                 />
               ) : (

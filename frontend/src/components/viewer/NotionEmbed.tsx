@@ -162,19 +162,23 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
     )
   }
 
-  // hideComments 모드: clip-path으로 우측 220px 댓글 영역 숨김 (height 제한 없음)
+  // hideComments 모드: clip-path + canvas 배경으로 우측 댓글 영역 숨김 (다크모드 대응)
   // 일반 모드: height 그대로 사용
   const containerHeight = height
 
   // 유효한 URL인 경우 - iframe으로 Notion 페이지 표시
   return (
     <div
-      className="relative w-full bg-white"
+      className="relative w-full"
       style={{
         height: `${containerHeight}px`,
         overflow: 'hidden',
         pointerEvents: isLocked ? 'none' : 'auto',
-        ...(hideComments ? { clipPath: 'inset(0 220px 0 0)' } : {}),
+        ...(hideComments ? {
+          clipPath: 'inset(0 240px 0 0)',
+          colorScheme: 'light dark',
+          background: 'Canvas',
+        } : { background: 'white' }),
       }}
     >
       {/* 로딩 상태 */}
