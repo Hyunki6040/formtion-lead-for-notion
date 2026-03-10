@@ -172,22 +172,19 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
     )
   }
 
-  // hideComments 모드: clip-path + canvas 배경으로 우측 댓글 영역 숨김 (다크모드 대응)
-  // 일반 모드: height 그대로 사용
+  // none 모드: 오버레이 div로 우측 댓글 영역 숨김 (다크모드 대응)
   const containerHeight = height
+  // Notion 다크모드 배경색 (#191919) - 오버레이가 자연스럽게 블렌딩되도록
+  const notionBg = isDarkMode ? '#191919' : 'white'
 
   // 유효한 URL인 경우 - iframe으로 Notion 페이지 표시
   return (
     <div
-      className="relative w-full"
+      className="relative w-full bg-white"
       style={{
         height: `${containerHeight}px`,
         overflow: 'hidden',
         pointerEvents: isLocked ? 'none' : 'auto',
-        ...(hideComments ? {
-          clipPath: 'inset(0 220px 0 0)',
-          background: isDarkMode ? '#191919' : 'white',
-        } : { background: 'white' }),
       }}
     >
       {/* 로딩 상태 */}
@@ -216,6 +213,14 @@ export default function NotionEmbed({ url, isPreview: _isPreview = false, isLock
         allowFullScreen
         scrolling={(isLocked || hideComments) ? 'no' : 'yes'}
       />
+
+      {/* 우측 댓글 버블 숨김 오버레이 - Notion 배경색으로 블렌딩 */}
+      {hideComments && (
+        <div
+          className="absolute top-0 right-0 bottom-0 pointer-events-none z-10"
+          style={{ width: '220px', background: notionBg }}
+        />
+      )}
     </div>
   )
 }
